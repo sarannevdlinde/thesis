@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://kit.fontawesome.com/0ec6651746.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Lizz 2.0</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background-image: url("static/lizz_bg.jpeg");
+            background-color: lightgray;
+            background-position: 50%;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        h1, h2, h3, h4 {
+            color: #FFF;
+            font-family: 'Trebuchet MS', sans-serif;
+            font-size: 28px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            position: absolute;
+            bottom: 48%;
+            left: 16px;
+        }
+
+        h2 {
+            bottom: 42%;
+            left: 16px;
+        }
+
+        h3 {
+            bottom: 36%;
+            left: 16px;
+        }
+
+        h4 {
+            bottom: 30%;
+            left: 16px;
+        }
+
+        .strike-through {
+            text-decoration: line-through; !important;
+            color: red; !important;
+        }
+
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            padding: 18px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .taskbar-btn {
+            background-color: transparent;
+            border: none;
+            color: black;
+            font-size: 25px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .clicked {
+            color: #4B5320;
+        }
+
+        .taskbar-btn:hover {
+            color: #f00;
+        }
+
+        .menu {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .menu-content {
+            text-align: center;
+            font-size: 35px;
+            font-family: 'Trebuchet MS', sans-serif;
+            background-color: white;
+            position: absolute;
+            border: none;
+            bottom: 66.5px;
+            left: 0;
+            width: 100%;
+        }
+
+        .menu-header {
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .menu-item {
+            font-family: 'Trebuchet MS', sans-serif;
+            font-size: 25px;
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background-color: white;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 1px solid black;
+        }
+
+        #contactInfo {
+            display: none;
+        }
+
+        #contactInfo.show {
+            display: block;
+        }
+
+        #contactInfo {
+            text-align: center;
+            font-size: 25px;
+            font-family: 'Trebuchet MS', sans-serif;
+            background-color: white;
+            position: absolute;
+            border: none;
+            bottom: 66.5px;
+            left: 0;
+            width: 100%;
+        }
+
+        #video {
+            display: none;
+        }
+
+        #video.show {
+            display: block;
+        }
+
+        #video {
+            text-align: center;
+            font-size: 25px;
+            font-family: 'Trebuchet MS', sans-serif;
+            background-color: white;
+            position: absolute;
+            border: none;
+            bottom: 66.5px;
+            left: 0;
+            width: 100%;
+            padding-bottom: 80px;
+        }
+
+        #userMenu {
+            display: none;
+        }
+
+        #userMenu.show {
+            display: block;
+        }
+
+        #userMenu.menu-content {
+            text-align: center;
+            font-size: 35px;
+            font-family: 'Trebuchet MS', sans-serif;
+            background-color: white;
+            position: absolute;
+            border: none;
+            bottom: 66.5px;
+            left: 0;
+            width: 100%;
+        }
+
+        #userMenu.menu-header {
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        #userMenu.menu-item {
+            font-family: 'Trebuchet MS', sans-serif;
+            font-size: 25px;
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background-color: white;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #clock {
+            color: #FFF;
+            font-family: 'Trebuchet MS', sans-serif;
+            font-size: 80px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            position: absolute;
+            bottom: 22%;
+            right: 16px;
+        }
+
+        #currentDate {
+            color: #FFF;
+            font-family: 'Trebuchet MS', sans-serif;
+            font-size: 40px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            position: absolute;
+            bottom: 14%;
+            right: 16px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            font-family: 'Trebuchet MS', sans-serif;
+            font-size: 28px;
+            font-style: normal;
+            font-weight: 400;
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 25%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-options button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #4B5320;
+            color: black;
+            font-family: 'Trebuchet MS', sans-serif;
+            border: 1px solid-black;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #doneBtn {
+            background-color: #4B5320;
+        }
+
+        .modal-options button:hover {
+            background-color: #0056b3;
+        }
+
+        .modal-options button:not(#doneBtn) {
+            background-color: white;
+            font-family: 'Trebuchet MS', sans-serif;
+        }
+
+        body.dark-mode {
+            background-color: black;
+        }
+
+        .dark-mode-overlay {
+           display: none;
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background-color: rgba(0, 0, 0, 0.9);
+           z-index: 999;
+           justify-content: center;
+           align-items: center;
+           color: white;
+           font-family: 'Trebuchet MS', sans-serif;
+           font-size: 30px;
+        }
+
+        .dark-mode-overlay.show {
+            display: flex;
+        }
+
+        .dark-mode-button {
+             padding: 20px 40px;
+             background-color: #white;
+             color: black;
+             border: none;
+             border-radius: 5px;
+             cursor: pointer;
+             font-size: 30px;
+        }
+    </style>
+    <script>
+        setInterval(showTime, 1000);
+        function showTime() {
+        let time = new Date();
+        let hour = time.getHours();
+        let min = time.getMinutes();
+        let sec = time.getSeconds();
+
+        hour =
+            hour < 10 ? "0" + hour : hour;
+        min = min < 10 ? "0" + min : min;
+
+        let currentTime =
+            hour +
+            ":" +
+            min;
+
+        document.getElementById(
+            "clock"
+        ).innerHTML = currentTime;
+        }
+
+        showTime();
+    </script>
+    <script>
+        function formatDate(date) {
+        var daysOfWeek = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
+
+        var months = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
+
+        var dayOfWeek = daysOfWeek[date.getDay()];
+        var day = date.getDate();
+        var month = months[date.getMonth()];
+        var year = date.getFullYear();
+
+        var formattedDate = dayOfWeek + ' ' + day + ' ' + month;
+
+        return formattedDate;
+    }
+
+        function displayDate() {
+        var currentDate = new Date();
+
+        var formattedDate = formatDate(currentDate);
+
+        document.getElementById('currentDate').textContent = formattedDate;
+        }
+
+        window.onload = displayDate;
+
+    </script>
+</head>
+<body>
+<div id="darkModeOverlay" class="dark-mode-overlay">
+    <button class="dark-mode-button" onclick="wakkerWorden()">Wakker Worden</button>
+</div>
+</div>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="modalMessage"> Medicijnen innemen</p>
+        <div class="modal-options">
+            <div class="button-container">
+                <button id="postponeBtn">X Uitstellen</button>
+                <button id="doneBtn">V Gedaan</button>
+            </div>
+            <audio id="alertAudio" autoplay muted>
+                <source id="audioSource" src="" type="audio/mpeg">
+            </audio>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+    const audioElement = document.getElementById('alertAudio');
+    const audioSource = document.getElementById('audioSource');
+
+  <!--Ensure audio is muted to prevent browser issues-->
+    function playAudio() {
+      audioElement.muted = false;
+      audioElement.volume = 1.0; // Ensure the volume is set to maximum
+      audioElement.play().catch(error => {
+        console.log('Audio play failed:', error);
+      });
+    }
+
+    document.body.addEventListener('click', playAudio, { once: true });
+    document.body.addEventListener('keypress', playAudio, { once: true });
+  });
+
+  <!--Message array-->
+  const messages = [
+    "Medicijnen innemen",
+    "Lunchtijd",
+    "Tijd om te bewegen",
+    "Tijd om op te ruimen"
+  ];
+
+  <!--Audio files-->
+  const audioFiles = [
+    "static/output_0.mp3",
+    "static/output_1.mp3",
+    "static/output_2.mp3",
+    "static/output_3.mp3"
+  ];
+
+  let messageIndex = 0;
+
+  <!--Show modal with corresponding message-->
+  function showMessage(message) {
+    const modal = document.getElementById("myModal");
+    const modalMessage = document.getElementById("modalMessage");
+    const audioElement = document.getElementById('alertAudio');
+    const audioSource = document.getElementById('audioSource');
+
+    modalMessage.textContent = message;
+    modal.style.display = "block";
+
+
+    audioSource.src = audioFiles[messageIndex];
+    audioElement.load(); // Load the new audio source
+    audioElement.play().catch(error => {
+      console.log('Audio play failed:', error);
+    });
+  }
+
+  <!--Close modal-->
+  function closeModal() {
+    const modal = document.getElementById("myModal");
+    modal.style.display = "none";
+  }
+
+  const closeBtn = document.querySelector(".close");
+  closeBtn.addEventListener("click", closeModal);
+
+  window.addEventListener("click", function(event) {
+    const modal = document.getElementById("myModal");
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  setInterval(() => {
+    showMessage(messages[messageIndex]);
+    messageIndex = (messageIndex + 1) % messages.length;
+  }, 2 * 60 * 1000); // 2 minuten in milliseconden
+
+  showMessage(messages[messageIndex]);
+  messageIndex = (messageIndex + 1) % messages.length;
+
+</script>
+<script>
+    $(document).ready(function() {
+      function displayModal(message) {
+        $("#modalMessage").text(message);
+        $("#myModal").css("display", "block");
+        }
+
+      displayModal();
+
+      $(".close").click(function() {
+        $("#myModal").css("display", "none");
+      });
+
+      $("#postponeBtn").click(function() {
+        $("#myModal").css("display", "none");
+      });
+
+      $("#doneBtn").click(function() {
+        $("#myModal").css("display", "none");
+      });
+    });
+</script>
+<div class="taskbar">
+    <button class="taskbar-btn" onclick="homeClicked()"><i id="homeIcon" class="fa-solid fa-house"></i></button>
+    <button class="taskbar-btn" onclick="readClicked()"><i id="readIcon" class="fa-solid fa-book-open"></i></button>
+    <button class="taskbar-btn" onclick="userClicked()"><i id="userIcon" class="fa-solid fa-user"></i></button>
+    <button class="taskbar-btn" onclick="flagClicked()"><i id="flagIcon" class="fa-solid fa-moon"></i></button>
+    <button class="taskbar-btn" onclick="bellClicked()"><i id="bellIcon" class="fa-solid fa-volume-high"></i></button>
+</div>
+<div class="menu" id="menu">
+    <div class="menu-content">
+        <div class="menu-header">Informatie</div>
+        <button class="menu-item" onclick="videoClicked()"><i id="videoIcon" class="fa-solid fa-video"></i> Video's
+        </button>
+        <button class="menu-item" onclick="contactClicked()"><i id="contactIcon" class="fa-solid fa-user-circle"></i>
+            Contact Informatie
+        </button>
+    </div>
+</div>
+<div class="menu" id="userMenu">
+    <div class="menu-content">
+        <div class="menu-header">Persoonlijke informatie</div>
+        <button class="menu-item" onclick="agendaClicked()"><i id="agendaIcon" class="fa-regular fa-calendar"></i>
+            Agenda
+        </button>
+    </div>
+</div>
+<div class=menu id="contactInfo">
+    <div class="menu-header">Contactinformatie</div>
+    <p>E-mail: voorbeeld@lizz.com</p>
+    <p>Telefoon: 012-3456789</p>
+    <p>Adres: Straatnaam 123, Plaatsnaam</p>
+</div>
+<div class="menu" id="video">
+    <div class="menu-header">Video's</div>
+</div>
+<script>
+    document.getElementById('homeButton').addEventListener('click', homeClicked);
+    document.getElementById('readButton').addEventListener('click', readClicked);
+    document.getElementById('userButton').addEventListener('click', userClicked);
+    document.getElementById('flagButton').addEventListener('click', flagClicked);
+    document.getElementById('bellButton').addEventListener('click', bellClicked);
+</script>
+<script>
+    <!--Hide menu-->
+    function hideAllMenus() {
+    var menus = document.querySelectorAll('.menu');
+    menus.forEach(function(menu) {
+        menu.classList.remove('show');
+    });
+    }
+
+    <!--Remove icon from classlist when clicked-->
+    function toggleIconClickedState(icon) {
+    var clickedIcon = document.querySelector('.taskbar-btn .clicked');
+    if (clickedIcon && clickedIcon !== icon) {
+        clickedIcon.classList.remove('clicked');
+    }
+    icon.classList.toggle('clicked');
+    }
+
+    <!--Toggle menu visibility when icon is clicked-->
+    function toggleMenuVisibility(iconId, menuId) {
+    var icon = document.getElementById(iconId);
+    var menu = document.getElementById(menuId);
+    var isActive = icon.classList.contains('clicked');
+    var icons = document.querySelectorAll('.taskbar-btn .clicked');
+
+    icons.forEach(function(icon) {
+        // Exclude specified icons from changing color
+        if (icon.id !== iconId && icon.id !== 'contactIcon' && icon.id !== 'agendaIcon' && icon.id !== 'videoIcon') {
+            icon.classList.remove('clicked');
+        }
+    });
+
+    if (menu.classList.contains('show') && isActive) {
+        menu.classList.remove('show');
+        // Don't change color of specified icons
+        if (iconId !== 'contactIcon' && iconId !== 'agendaIcon' && iconId !== 'videoIcon') {
+            icon.classList.remove('clicked');
+        }
+    } else {
+        hideAllMenus();
+        menu.classList.add('show');
+        // Don't change color of specified icons
+        if (iconId !== 'contactIcon' && iconId !== 'agendaIcon' && iconId !== 'videoIcon') {
+            icon.classList.add('clicked');
+        }
+    }
+    }
+
+        function homeClicked() {
+        hideAllMenus();
+        console.log("Home button clicked!");
+        var icon = document.getElementById('homeIcon');
+        toggleIconClickedState(icon);
+        }
+
+        function readClicked() {
+        console.log("Read button clicked!");
+        toggleMenuVisibility('readIcon', 'menu');
+        }
+
+        function userClicked() {
+        console.log("User button clicked!");
+        toggleMenuVisibility('userIcon', 'userMenu');
+        }
+
+        function flagClicked() {
+        hideAllMenus();
+        console.log("Flag button clicked!");
+        var icon = document.getElementById('flagIcon');
+        toggleIconClickedState(icon);
+
+        <!--Toggle dark mode-->
+        var body = document.body;
+        var overlay = document.getElementById('darkModeOverlay');
+        body.classList.toggle('dark-mode');
+        overlay.classList.toggle('show');
+        }
+
+        function wakkerWorden() {
+        var body = document.body;
+        var overlay = document.getElementById('darkModeOverlay');
+        body.classList.remove('dark-mode');
+        overlay.classList.remove('show');
+        }
+
+
+        function hideModal() {
+        $("#myModal").css("display", "none");
+        }
+
+        function stopAudio() {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+        }
+
+        function bellClicked() {
+        hideAllMenus();
+        console.log("Bell button clicked!");
+        var icon = document.getElementById('bellIcon');
+        icon.classList.toggle('strike-through');
+        toggleIconClickedState(icon);
+
+        <!--Disable sound-->
+        soundEnabled = false;
+        console.log("Sound disabled");
+        stopAudio();
+    }
+
+        function contactClicked() {
+    <!--    hideAllMenus();-->
+        toggleMenuVisibility('contactIcon', 'contactInfo');
+        }
+
+        function videoClicked () {
+        toggleMenuVisibility('videoIcon', 'video');
+        }
+</script>
+<script>
+    <!--Message array-->
+    const messages = [
+        "Medicijnen innemen",
+        "Lunchtijd",
+        "Tijd om te bewegen",
+        "Tijd om op te ruimen"
+    ];
+
+    let messageIndex = 0;
+
+    <!--Show message in modal-->
+    function showMessage(message) {
+        const modal = document.getElementById("myModal");
+        const modalMessage = document.getElementById("modalMessage");
+        modalMessage.textContent = message;
+        modal.style.display = "block";
+    }
+
+    <!--Close modal-->
+    function closeModal() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
+    const closeBtn = document.querySelector(".close");
+    closeBtn.addEventListener("click", closeModal);
+
+    window.addEventListener("click", function(event) {
+        const modal = document.getElementById("myModal");
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    setInterval(() => {
+        showMessage(messages[messageIndex]);
+        messageIndex = (messageIndex + 1) % messages.length;
+    }, 2 * 60 * 1000);
+
+    showMessage(messages[messageIndex]);
+    messageIndex = (messageIndex + 1) % messages.length;
+</script>
+</body>
+</html>
+</script>
+<h1>9:00 Ochtendgymnastiek</h1>
+<h2>9:45 Medicatie</h2>
+<h3>10:30 Vragenlijst</h3>
+<h4>12:00 Lunchen</h4>
+<div id="clock">13:32</div>
+
+<script src="clock2.js"></script>
+<p><span id="currentDate"></span></p>
+</body>
+</html>
